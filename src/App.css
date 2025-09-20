@@ -1,38 +1,299 @@
-.App {
-  text-align: center;
+:root {
+  --brand: #00e59a;
+  --brand2: #24ffd0;
+  --ink: #ffffff;
+  --btnText: #021d14;
+  --danger: #ff4d6d;
+  --panelBorder: #00e59a55;
+  --gridColor: rgba(255, 255, 255, 0.05);
 }
 
-.App-logo {
-  height: 40vmin;
+body {
+  margin: 0;
+  font-family: "Tajawal", sans-serif;
+  color: var(--ink);
+  background: #021d14;
+  direction: rtl;
+  text-align: right;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✅ خلفية grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(var(--gridColor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gridColor) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -2;
+}
+
+/* ✅ كشاف Spotlight */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.08) 0,
+    transparent 200px
+  );
+  z-index: -1;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.game-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 40px;
+  box-sizing: border-box;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 80px;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  position: relative;
+  z-index: 2;
 }
 
-@keyframes App-logo-spin {
+@media (max-width: 992px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .hints-col {
+    order: 2;
+  }
+  .image-card {
+    order: 1;
+  }
+}
+
+.hints-col {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin-top: -40px;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--panelBorder);
+  border-radius: 22px;
+  box-shadow: 0 0 25px #00e59a66;
+  padding: 20px;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.hint-card,
+.timer-card {
+  min-width: 220px;
+}
+
+/* ✅ خطوط التوصيل */
+.hints-col .panel:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 40px;
+  background: linear-gradient(180deg, var(--brand), var(--brand2));
+  box-shadow: 0 0 10px var(--brand2);
+  border-radius: 4px;
+}
+.hint-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  height: 4px;
+  width: calc(40% + 10px);
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  box-shadow: 0 0 10px var(--brand);
+  border-radius: 4px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.image-card {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.image-card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  height: 4px;
+  width: calc(13.2% + 10px);
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  box-shadow: 0 0 10px var(--brand2);
+  border-radius: 4px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.game-image {
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid var(--panelBorder);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  transition: filter 1s;
+  max-height: 60vh;
+}
+.blur-heavy {
+  filter: blur(30px);
+}
+.blur-light {
+  filter: blur(12px);
+}
+.clear {
+  filter: blur(0);
+}
+
+.answer {
+  margin-top: 16px;
+  font-weight: 800;
+  color: #afffe8;
+  font-size: 22px;
+}
+
+/* ✅ التايمر */
+.timer-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.digital-timer {
+  font-size: 38px;
+  font-weight: 800;
+  font-family: "Courier New", monospace;
+  color: var(--brand2);
+  text-shadow: 0 0 10px var(--brand), 0 0 20px var(--brand2);
+  text-align: center;
+}
+.timer-danger {
+  color: var(--danger);
+  text-shadow: 0 0 15px var(--danger), 0 0 30px var(--danger);
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ✅ أيقونة الهدايا والهوم */
+.gift-icon {
+  width: 180px;
+  height: 180px;
+  border-radius: 30px;
+  font-size: 100px;
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+  color: var(--btnText);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto;
+  cursor: pointer;
+  box-shadow: 0 0 30px #00e59a99;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gift-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 50px #00e59a;
+}
+.home-icon {
+  cursor: pointer;
+}
+
+/* ✅ Confetti */
+.confetti-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ✅ أنيميشن خسارة (كل الكروت تصير حمراء) */
+.lose-mode .panel,
+.lose-mode .gift-icon {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 20px var(--danger);
+  transition: all 0.5s ease;
+}
+
+
+/* ✅ أنيميشن خسارة (كل الكروت والايقونات تصير حمراء) */
+.lose-mode .panel,
+.lose-mode .gift-icon {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 20px var(--danger);
+  transition: all 0.5s ease;
+}
+
+/* ✅ حتى الخطوط تتحول للأحمر */
+.lose-mode .hints-col .panel:not(:last-child)::after {
+  background: linear-gradient(180deg, var(--danger), #ff99aa);
+  box-shadow: 0 0 10px var(--danger);
+}
+.lose-mode .hint-card::before,
+.lose-mode .image-card::after {
+  background: linear-gradient(90deg, var(--danger), #ff99aa);
+  box-shadow: 0 0 10px var(--danger);
+}
+
+/* ✅ نص النتيجة فوق الكروت بشكل أنيق */
+.result-banner {
+  position: absolute;
+  top: 30px;
+  right: 50%;
+  transform: translateX(50%);
+  font-size: 46px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 1px;
+  animation: slideDown 0.8s ease forwards;
+  z-index: 200;
+  background: linear-gradient(90deg, var(--brand), var(--brand2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lose-text {
+  background: linear-gradient(90deg, var(--danger), #ff99aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 15px rgba(255, 77, 109, 0.6);
+}
+
+@keyframes slideDown {
   from {
-    transform: rotate(0deg);
+    transform: translateX(50%) translateY(-40px);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    transform: translateX(50%) translateY(0);
+    opacity: 1;
   }
 }

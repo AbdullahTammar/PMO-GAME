@@ -100,6 +100,7 @@ body::after {
   padding: 20px;
   transition: all 0.4s ease;
   position: relative;
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .hint-card,
@@ -462,4 +463,20 @@ body::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 15px rgba(255, 77, 109, 0.6);
+}
+
+
+@media (min-width: 2560px) {
+  .home-content h1 {
+    font-size: 120px; /* تكبير العنوان */
+  }
+
+  .btn {
+    font-size: 40px;
+    padding: 30px 80px;
+  }
+
+  .game-image {
+    max-height: 70vh; /* أكبر شوي للشاشات العملاقة */
+  }
 }

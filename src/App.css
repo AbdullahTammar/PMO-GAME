@@ -53,7 +53,6 @@ body::after {
   padding: 40px;
   box-sizing: border-box;
   position: relative;
-  overflow: hidden;
 }
 
 
@@ -95,14 +94,13 @@ body::after {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(14px);
   border: 1px solid var(--panelBorder);
-  border-radius: clamp(12px, 2vw, 22px);
+  border-radius: 22px;
   box-shadow: 0 0 25px #00e59a66;
-  padding: clamp(12px, 2vw, 20px);
+  padding: 20px;
   transition: all 0.4s ease;
   position: relative;
   -webkit-backdrop-filter: blur(14px);
 }
-
 
 .hint-card,
 .timer-card {
@@ -159,13 +157,12 @@ body::after {
 
 .game-image {
   width: 100%;
-  border-radius: clamp(12px, 2vw, 20px);
+  border-radius: 20px;
   border: 1px solid var(--panelBorder);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
   transition: filter 1s;
-  max-height: clamp(40vh, 60vh, 75vh);
+  max-height: 60vh;
 }
-
 .blur-heavy {
   filter: blur(30px);
 }
@@ -191,14 +188,13 @@ body::after {
   padding: 20px;
 }
 .digital-timer {
-  font-size: clamp(24px, 5vw, 38px);
+  font-size: 38px;
   font-weight: 800;
   font-family: "Courier New", monospace;
   color: var(--brand2);
   text-shadow: 0 0 10px var(--brand), 0 0 20px var(--brand2);
   text-align: center;
 }
-
 .timer-danger {
   color: var(--danger);
   text-shadow: 0 0 15px var(--danger), 0 0 30px var(--danger);
@@ -211,24 +207,20 @@ body::after {
 
 /* ✅ أيقونة الهدايا والهوم */
 .gift-icon {
-  width: clamp(100px, 12vw, 180px);
-  height: clamp(100px, 12vw, 180px);
-  border-radius: clamp(16px, 3vw, 30px);
-  font-size: clamp(50px, 6vw, 100px);
+  width: 180px;
+  height: 180px;
+  border-radius: 30px;
+  font-size: 100px;
   background: linear-gradient(135deg, var(--brand), var(--brand2));
   color: var(--btnText);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: clamp(20px, 5vh, 40px) auto;
+  margin: 40px auto;
   cursor: pointer;
   box-shadow: 0 0 30px #00e59a99;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.gift-icon:active {
-  transform: scale(0.95);
-}
-
 .gift-icon:hover {
   transform: scale(1.1);
   box-shadow: 0 0 50px #00e59a;
@@ -482,10 +474,8 @@ body::after {
     font-size: 40px;
     padding: 30px 80px;
   }
-}
-h2 {
-  font-size: clamp(16px, 2vw, 24px);
-}
-.answer {
-  font-size: clamp(16px, 2vw, 22px);
+
+  .game-image {
+    max-height: 70vh; /* أكبر شوي للشاشات العملاقة */
+  }
 }

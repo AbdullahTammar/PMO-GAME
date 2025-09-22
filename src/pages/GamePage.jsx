@@ -6,7 +6,7 @@ import Confetti from "react-confetti";
 import "../App.css";
 
 function GamePage() {
-  const { currentIndex, setCurrentIndex } = useContext(GameContext);
+  const { currentIndex } = useContext(GameContext);
   const navigate = useNavigate();
 
   const [attempt, setAttempt] = useState(1);
@@ -74,9 +74,16 @@ function GamePage() {
       img: "/assets/Q7.jpg",
     },
   ];
-  
 
   const data = questions[currentIndex];
+
+  // ✅ Preload برمجي لكل الصور أول ما تفتح اللعبة
+  useEffect(() => {
+    questions.forEach((q) => {
+      const img = new Image();
+      img.src = q.img;
+    });
+  }, []);
 
   useEffect(() => {
     setAttempt(1);
@@ -119,81 +126,94 @@ function GamePage() {
 
   function goHome() {
     setShowConfetti(false);
-    setCurrentIndex((prev) => (prev + 1) % questions.length);
     navigate("/");
   }
 
   return (
-    <div className={`game-container ${showLose ? "lose-mode" : ""}`} dir="rtl">
-      {/* ✅ الاحتفالات */}
-      {showConfetti && (
-        <div className="confetti-wrapper">
-          <Confetti numberOfPieces={500} recycle={true} />
-        </div>
-      )}
+    <div className="game-page-wrapper" dir="rtl">
+      {/* ✅ الشعارات العلوية */}
+      <div className="game-logos-static">
+        <img
+          src="/assets/NaDayLogo.png"
+          alt="شعار اليوم الوطني"
+          className="logo-static"
+        />
+        <img
+          src="/assets/pmoLogoGame.png"
+          alt="شعار وزارة المالية"
+          className="logo-static"
+        />
+      </div>
 
       {/* ✅ رسالة الفوز/الخسارة */}
-      {showWin && (
-  <div className="result-banner win-text">مبروك! إجابة صحيحة</div>
-)}
-{showLose && (
-  <div className="result-banner lose-text">انتهى الوقت — حظ أوفر</div>
-)}
+      <div className="result-banner-wrapper">
+        {showWin && (
+          <div className="result-banner win-text">مبروك! إجابة صحيحة</div>
+        )}
+        {showLose && (
+          <div className="result-banner lose-text">
+            انتهى الوقت — حظ أوفر
+          </div>
+        )}
+      </div>
 
+      {/* ✅ الصفحة الرئيسية للعبة */}
+      <div className={`game-container ${showLose ? "lose-mode" : ""}`}>
+        {showConfetti && (
+          <div className="confetti-wrapper">
+            <Confetti numberOfPieces={500} recycle={true} />
+          </div>
+        )}
 
-
-      <div className="cards-grid">
-        {/* ✅ العمود الأيمن (التايمر + التلميحات) */}
-        <div className="hints-col">
-          <div className="panel timer-card">
-            <div
-              className={`digital-timer ${
-                timeLeft <= 10 ? "timer-danger" : ""
-              }`}
-            >
-              {timeLeft}
+        <div className="cards-grid">
+          {/* ✅ العمود الأيمن (التايمر + التلميحات) */}
+          <div className="hints-col">
+            <div className="panel timer-card">
+              <div
+                className={`digital-timer ${
+                  timeLeft <= 10 ? "timer-danger" : ""
+                }`}
+              >
+                {timeLeft}
+              </div>
             </div>
+
+            <section className="panel hint-card">
+              <h2>{data.hints[0]}</h2>
+            </section>
+
+            {attempt >= 2 && (
+              <section className="panel hint-card">
+                <h2>{data.hints[1]}</h2>
+              </section>
+            )}
           </div>
 
-          <section className="panel hint-card">
-            {/* <h2>تلميح 1</h2> */}
-            <h2>{data.hints[0]}</h2>
+          {/* ✅ الكرت الأوسط (الصورة) */}
+          <section className="panel image-card">
+            <img
+              src={data.img}
+              alt="من أنا؟"
+              className={`game-image ${
+                showAnswer ? "clear" : attempt === 1 ? "blur-heavy" : "blur-light"
+              }`}
+            />
+            {showAnswer && <div className="answer">الإجابة: {data.answer}</div>}
           </section>
 
-          {attempt >= 2 && (
-            <section className="panel hint-card">
-              {/* <h2>تلميح 2</h2> */}
-              <h2>{data.hints[1]}</h2>
-            </section>
-          )}
-        </div>
-
-        {/* ✅ الكرت الأوسط (الصورة) */}
-        <section className="panel image-card">
-          <img
-            src={data.img}
-            alt="من أنا؟"
-            className={`game-image ${
-              showAnswer ? "clear" : attempt === 1 ? "blur-heavy" : "blur-light"
-            }`}
-          />
-          {showAnswer && <div className="answer">الإجابة: {data.answer}</div>}
-        </section>
-
-        {/* ✅ أيقونة الجائزة / الهوم */}
-        <div className="reward-col">
-        {!showAnswer && timeLeft > 0 && (
-  <div className="gift-icon" onClick={reveal}>
-    <FaGift />
-  </div>
-)}
-
-{(showWin || showLose || timeLeft <= 0) && (
-  <div className="gift-icon home-icon" onClick={goHome}>
-    <FaHome />
-  </div>
-)}
-
+          {/* ✅ أيقونة الجائزة / الهوم */}
+          <div className="reward-col">
+            {!showAnswer && timeLeft > 0 && (
+              <div className="gift-icon" onClick={reveal}>
+                <FaGift />
+              </div>
+            )}
+            {(showWin || showLose || timeLeft <= 0) && (
+              <div className="gift-icon home-icon" onClick={goHome}>
+                <FaHome />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

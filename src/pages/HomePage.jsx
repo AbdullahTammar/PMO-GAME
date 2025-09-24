@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { GameContext } from "../context/GameContext";
 import "../App.css";
 
-const QUESTIONS_COUNT = 7; // حدّثه إذا زاد/نقص عدد الأسئلة
+const QUESTIONS_COUNT = 45; // حدّثه إذا زاد/نقص عدد الأسئلة
 
 function HomePage() {
   const navigate = useNavigate();

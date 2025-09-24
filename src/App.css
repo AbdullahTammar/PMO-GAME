@@ -146,7 +146,7 @@ body::after {
   top: 50%;
   right: 100%;
   height: 4px;
-  width: calc(13.2% + 10px);
+  width: calc(13.5% + 10px);
   background: linear-gradient(90deg, var(--brand), var(--brand2));
   box-shadow: 0 0 10px var(--brand2);
   border-radius: 4px;
